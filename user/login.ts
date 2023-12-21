@@ -1,8 +1,12 @@
-import { Request, Response } from "express";
+import { Request as ExpressRequest, Response } from "express";
 import db from "../database";
 import { User } from "../types";
 
 const bcrypt = require("bcryptjs");
+
+interface Request extends ExpressRequest {
+    session: any;
+}
 
 export const login = (req: Request, res: Response) => {
     const user: User = req.body;
@@ -19,7 +23,15 @@ export const login = (req: Request, res: Response) => {
                 const userData = result[0];
                 const isPasswordMatch = await bcrypt.compare(user.password, userData.password);
                 if (isPasswordMatch) {
-                    res.send({ status: "success", userData: userData });
+                    const user: User = {
+                        firstName: userData.first_name,
+                        lastName: userData.last_name,
+                        email: userData.email,
+                        password: userData.password,
+                        roleId: userData.role_id.toString()
+                    };
+                    req.session.user = user;
+                    res.send({ status: "success", user: user });
                 } else {
                     res.send({ status: "error", message: "Wrong password" });
                 }
