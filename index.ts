@@ -1,6 +1,7 @@
 import { Request as ExpressRequest, Response } from "express";
 import {login} from "./user/login";
 import {signup} from "./user/signup";
+import {emailValidate} from "./user/email-validate";
 
 interface Request extends ExpressRequest {
     session: any;
@@ -40,6 +41,11 @@ app.post("/user/login", (req: Request, res: Response) => {
 
 app.post("/user/signup", async (req: Request, res: Response) => {
     await signup(req, res);
+});
+
+app.post("/user/email-validate", async (req: Request, res: Response) => {
+    const email = req.body.email;
+    await emailValidate(email, res);
 });
 
 app.listen(port, () => {
