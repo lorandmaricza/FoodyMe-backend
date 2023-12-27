@@ -20,15 +20,16 @@ export const login = (req: Request, res: Response) => {
             if (result.length === 0) {
                 res.send({ status: "error", message: "User not found" });
             } else {
-                const userData = result[0];
-                const isPasswordMatch = await bcrypt.compare(user.password, userData.password);
+                const userResult = result[0];
+                const isPasswordMatch = await bcrypt.compare(user.password, userResult.password);
                 if (isPasswordMatch) {
                     const user: User = {
-                        firstName: userData.first_name,
-                        lastName: userData.last_name,
-                        email: userData.email,
-                        password: userData.password,
-                        roleId: userData.role_id.toString()
+                        firstName: userResult.first_name,
+                        lastName: userResult.last_name,
+                        email: userResult.email,
+                        password: userResult.password,
+                        userId: userResult.id,
+                        roleId: userResult.role_id
                     };
                     req.session.user = user;
                     res.send({ status: "success", user: user });
