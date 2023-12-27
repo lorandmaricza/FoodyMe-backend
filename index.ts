@@ -2,6 +2,7 @@ import { Request as ExpressRequest, Response } from "express";
 import {login} from "./user/login";
 import {signup} from "./user/signup";
 import {emailValidate} from "./user/email-validate";
+import {getAllCategories} from "./category/all";
 
 interface Request extends ExpressRequest {
     session: any;
@@ -51,6 +52,10 @@ app.post("/user/email-validate", async (req: Request, res: Response) => {
 app.get("/user/logout", (req: Request, res: Response) => {
     req.session.destroy();
     res.send({ status: "success", message: "User logged out" });
+});
+
+app.post("/category/all", async (req: Request, res: Response) => {
+   await getAllCategories(req, res);
 });
 
 app.listen(port, () => {
