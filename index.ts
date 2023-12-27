@@ -48,6 +48,11 @@ app.post("/user/email-validate", async (req: Request, res: Response) => {
     await emailValidate(email, res);
 });
 
+app.get("/user/logout", (req: Request, res: Response) => {
+    req.session.destroy();
+    res.send({ status: "success", message: "User logged out" });
+});
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`);
 });
